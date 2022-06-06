@@ -1,5 +1,4 @@
 import React from "react";
-import CollectionData from "../assets/CollectionData";
 import styled from "@emotion/styled";
 import Colors from "../styles/Colors";
 import {
@@ -44,7 +43,7 @@ const Authenticate: React.FC<AuthenticateProps> = ({
   const { result, loading } = useCreateNonceLink(createAuthorizationNonceLink, {
     params: {
       gate: {
-        collection: collection?.collectionId ?? "",
+        collectionId: collection?.collectionId ?? "",
       },
     },
   });
