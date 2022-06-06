@@ -19,7 +19,6 @@ import AppState from "../recoil/app.recoil";
 import PageLayout from "../components/PageLayout";
 
 const Container = styled.div`
-  top: 0px;
   display: flex;
   height: 500px;
   width: 100%;
@@ -27,11 +26,24 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const RightContainer = styled.div`
+  box-sizing: border-box;
+  height: 300px;
+  width: 300px;
+  border: 4px solid ${Colors.Purple};
+  background-color: ${Colors.AlmostDarkBlue};
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+
 const QRCodeContainer = styled.div`
+  box-sizing: border-box;
   height: 300px;
   width: 300px;
   background-color: ${Colors.White};
-  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,39 +103,73 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
         Verify {collection?.name}
       </Text>
       <Container>
-        <Flex align="center" width="900px" justify="space-between">
-          <Card collection={collection} margin="0" />
-          <Flex direction="column" justify="center" align="center">
-            <Loader
-              size={LoaderSizes.Large}
-              color={
-                authData?.status === TransactionStatuses.Scanned
-                  ? Colors.Green500
-                  : Colors.White
-              }
-            />
+       {(() => {
+        if(authData?.status !== TransactionStatuses.Confirmed) {
+          return (
+            <Flex align="center" width="900px" justify="space-between">
+              <Card collection={collection} margin="0" />
+              <Flex direction="column" justify="center" align="center">
+                <Loader
+                  size={LoaderSizes.Large}
+                  color={
+                    authData?.status === TransactionStatuses.Scanned
+                      ? Colors.Green500
+                      : Colors.White
+                  }
+                />
+                <Text
+                  type={TextTypesEnum.Medium24}
+                  color={Colors.White}
+                  margin="16px 0 0"
+                >
+                  {authData?.status === TransactionStatuses.Scanned
+                    ? "Confirming..."
+                    : "Waiting for scan"}
+                </Text>
+              </Flex>
+              <Flex>
+                <Flex direction="column" height="100%" align="center">
+                  <RightContainer>
+                    {(() => {
+                      if (authData?.gate?.image) {
+                        return <Image src={authData?.gate?.image} />;
+                      }
+
+                      if (loading || !result?.link) {
+                        return (
+                          <Loader
+                            size={LoaderSizes.Medium}
+                            color={Colors.White}
+                          />
+                        );
+                      }
+
+                      return (
+                        <QRCodeContainer>
+                          <QRCode value={result?.link ?? ""} size={256} />;
+                        </QRCodeContainer>
+                      );
+                    })()}
+                  </RightContainer>
+                </Flex>
+              </Flex>
+            </Flex>
+          );
+        }
+
+        return (
+          <Flex align="center" direction="column">
+            <Image src={authData?.gate?.image} />
             <Text
-              type={TextTypesEnum.Medium24}
+              type={TextTypesEnum.Bold24}
               color={Colors.White}
-              margin="16px 0 0"
+              margin="16px 0 0 0"
             >
-              {authData?.status === TransactionStatuses.Scanned
-                ? "Confirming..."
-                : "Waiting for scan"}
+              {authData?.gate?.name} verified
             </Text>
           </Flex>
-          <Flex>
-            <Flex direction="column" height="100%" align="center">
-              {authData?.gate?.image ? (
-                <Image src={authData?.gate?.image} />
-              ) : (
-                <QRCodeContainer>
-                  <QRCode value={result?.link ?? ""} size={256} />
-                </QRCodeContainer>
-              )}
-            </Flex>
-          </Flex>
-        </Flex>
+        );
+       })()}
       </Container>
     </PageLayout>
   );
