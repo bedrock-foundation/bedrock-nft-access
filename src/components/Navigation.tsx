@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 `;
 
-const HoverLink = styled(Link)`
+const HoverLink = styled.a`
   &:hover {
     cursor: pointer;
   }
@@ -85,7 +85,7 @@ const Navigation: React.FC<NavigationProps> = () => {
   /** Render */
   return (
     <Container>
-      <HoverLink to="/">
+      <HoverLink href="https://bedrock.fyi">
         <Row>
           <BedrockLogo width="60px">
             <Image src={BedrockMark} />
