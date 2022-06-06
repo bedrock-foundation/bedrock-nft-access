@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bedrock-foundation/react-sdk": "^0.0.13",
+    "@bedrock-foundation/react-sdk": "^0.0.15",
     "@emotion/styled": "^11.8.1",
     "framer-motion": "^6.3.10",
     "polished": "^4.2.2",

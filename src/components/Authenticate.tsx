@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import Colors from "../styles/Colors";
 import {
-  Bedrock,
+  useBedrock,
   useCreateNonceLink,
   useNonceSocket,
   AuthorizationData,
@@ -13,10 +13,6 @@ import Loader, { LoaderSizes } from "../elements/Loader";
 import Card from '../elements/Card';
 import Flex from '../elements/Flex';
 import Text, { TextTypesEnum } from "../elements/Text";
-
-const {
-  core: { createAuthorizationNonceLink },
-} = new Bedrock("https://magically-production.ngrok.io");
 
 const Container = styled.div`
   display: flex;
@@ -40,6 +36,13 @@ const Authenticate: React.FC<AuthenticateProps> = ({
   const [authData, setAuthData] = React.useState<AuthorizationData | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
+
+  const bedrock = useBedrock();
+
+  const {
+    core: { createAuthorizationNonceLink },
+  } = bedrock;
+
   const { result, loading } = useCreateNonceLink(createAuthorizationNonceLink, {
     params: {
       gate: {
@@ -49,6 +52,7 @@ const Authenticate: React.FC<AuthenticateProps> = ({
   });
 
   useNonceSocket<AuthorizationData>({
+    bedrock,
     nonce: result?.nonce ?? "",
     onChange: (data: AuthorizationData) => {
       setAuthData(data);
