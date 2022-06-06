@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Link } from "react-router-dom";
 import Colors from '../styles/Colors';
 import BedrockMark from '../assets/bedrock-logo.png';
 import BedrockMarkWide from '../assets/bedrock-logo-wide.png';
@@ -12,7 +11,7 @@ const Breakpoint = '1080px';
 const Container = styled.div`
   position: relative;
   width: fill-available;
-  padding: 36px;
+  padding: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;

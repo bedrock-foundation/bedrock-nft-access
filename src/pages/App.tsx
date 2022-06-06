@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Navigation from "./components/Navigation";
-import CollectionList from "./components/CollectionsList";
+import Navigation from "../components/Navigation";
+import CollectionList from "../components/CollectionsList";
+import PageLayout from "../components/PageLayout";
 
 function AuthorizationExample() {
 
@@ -17,10 +18,9 @@ function AuthorizationExample() {
   }, [location]);
 
   return (
-    <div>
-      <Navigation />
+    <PageLayout>
       <CollectionList />
-    </div>
+    </PageLayout>
   );
 }
 

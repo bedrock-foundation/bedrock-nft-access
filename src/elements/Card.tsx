@@ -2,12 +2,14 @@ import styled from '@emotion/styled';
 
 type CardProps = {
   collection: any;
+  margin?: string;
 };
 
 const Card = styled.div<CardProps>`
   border-radius: 16px;
   padding: 8px;
-  margin: 16px;
+  box-sizing: border-box;
+  margin: ${props => props.margin ?? '16px'};
   font-size: 30px;
   text-align: center;
   background-image: url(${(props) => props.collection.image});

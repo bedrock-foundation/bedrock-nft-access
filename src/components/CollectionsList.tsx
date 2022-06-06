@@ -1,14 +1,19 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 import CollectionData from '../assets/CollectionData';
 import styled from '@emotion/styled';
-import Authenticate from "./Authenticate";
+import Text, { TextTypesEnum } from "../elements/Text";
+import Colors from "../styles/Colors";
+import AppState from "../recoil/app.recoil";
 
 
-const Container = styled.div`
+const Container = styled.div``;
+
+const Grid = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
-  padding: 10px;
-  width: 100%;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 `;
 
 type CardProps = {
@@ -26,35 +31,44 @@ const Card = styled.div<CardProps>`
   background-position: center;
   height: 300px;
   width: 300px;
+  grid-template-columns: 1fr 1fr 1fr;
+
 `;
 
 type CollectionListProps = {};
 
 const CollectionList: React.FC<CollectionListProps> = () => {
-  const [selectedCollection, setSelectedCollection] = React.useState<any>("");
+  const navigate = useNavigate();
+
+  const [_, setCollectionId] = useRecoilState(AppState.collectionId);
+
+  const selectCollection = (collectionId: string) => {
+    setCollectionId(collectionId);
+    navigate(`/authenticate?collectionId=${collectionId}`);
+  }
 
   return (
-    <Container>
+    <Container>    
+      <Text type={TextTypesEnum.Bold24} color={Colors.White}>
+        Select Collection
+      </Text>
+      <Grid>
       {(() => {
-        if(selectedCollection) {
-          return (
-           <Authenticate collection={selectedCollection}  />
-          );
-        }
-
         return CollectionData.map((collection, index) => {
           return (
             <Card
               key={index}
               collection={collection}
-              onClick={() => setSelectedCollection(collection)}
+              onClick={() => selectCollection(collection?.collectionId ?? '')}
             >
               {collection.name}
             </Card>
           );
         });
       })()}
+      </Grid>
     </Container>
+    
   );
 };
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import { RecoilRoot } from 'recoil';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App";
+import App from "./pages/App";
+import Authenticate from './pages/Authenticate';
 import './styles/index.css';
 
 declare global {
@@ -15,9 +16,12 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-    </Routes>
-  </BrowserRouter>
+  <RecoilRoot>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/authenticate" element={<Authenticate />} />
+      </Routes>
+    </BrowserRouter>
+  </RecoilRoot>
 );
