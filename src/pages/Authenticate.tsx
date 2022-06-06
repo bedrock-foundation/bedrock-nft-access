@@ -28,6 +28,7 @@ const Container = styled.div`
 
 const RightContainer = styled.div`
   box-sizing: border-box;
+  border: 4px solid ${Colors.Purple};
   height: 300px;
   width: 300px;
   border: 4px solid ${Colors.Purple};
@@ -107,7 +108,7 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
         if(authData?.status !== TransactionStatuses.Confirmed) {
           return (
             <Flex align="center" width="900px" justify="space-between">
-              <Card collection={collection} margin="0" />
+              <Card name={collection?.name ?? ''} image={collection?.image ?? ''} margin="0" />
               <Flex direction="column" justify="center" align="center">
                 <Loader
                   size={LoaderSizes.Large}
@@ -129,28 +130,36 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
               </Flex>
               <Flex>
                 <Flex direction="column" height="100%" align="center">
-                  <RightContainer>
+                  
                     {(() => {
                       if (authData?.gate?.image) {
-                        return <Image src={authData?.gate?.image} />;
-                      }
-
-                      if (loading || !result?.link) {
                         return (
-                          <Loader
-                            size={LoaderSizes.Medium}
-                            color={Colors.White}
+                          <Card
+                            name={authData?.gate?.name ?? ''}
+                            image={authData?.gate?.image ?? ''}
                           />
                         );
                       }
 
+                      if (loading || !result?.link) {
+                        return (
+                          <RightContainer>
+                            <Loader
+                              size={LoaderSizes.Medium}
+                              color={Colors.White}
+                            />
+                          </RightContainer>
+                        );
+                      }
+
                       return (
-                        <QRCodeContainer>
-                          <QRCode value={result?.link ?? ""} size={256} />;
-                        </QRCodeContainer>
+                        <RightContainer>
+                          <QRCodeContainer>
+                            <QRCode value={result?.link ?? ""} size={256} />;
+                          </QRCodeContainer>
+                        </RightContainer>
                       );
                     })()}
-                  </RightContainer>
                 </Flex>
               </Flex>
             </Flex>
