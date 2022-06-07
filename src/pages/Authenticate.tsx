@@ -81,7 +81,7 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
 
   const collection = CollectionData.find((collection) => {
     return collection.collectionId === collectionId;
-  })
+  });
 
   const bedrock = useBedrock();
 
