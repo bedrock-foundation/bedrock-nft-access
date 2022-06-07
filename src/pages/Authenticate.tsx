@@ -60,6 +60,17 @@ const Image = styled.img`
   justify-content: center;
 `;
 
+const CollectionImage = styled.img`
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: ${Colors.White};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+`;
+
 type AuthenticateProps = {};
 
 const Authenticate: React.FC<AuthenticateProps> = ({}) => {
@@ -72,11 +83,12 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
     return collection.collectionId === collectionId;
   })
 
-
   const bedrock = useBedrock();
 
   const {
-    core: { createAuthorizationNonceLink },
+    core: {
+      createAuthorizationNonceLink
+    },
   } = bedrock;
 
   const { result, loading } = useCreateNonceLink(createAuthorizationNonceLink, {
@@ -96,47 +108,32 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
     onError: setError,
   });
 
-  console.log(authData);
-
   return (
     <PageLayout>
-      <Text type={TextTypesEnum.Bold24} color={Colors.White}>
-        Verify {collection?.name}
-      </Text>
+      <Flex align="center">
+        <CollectionImage src={collection?.image} />
+        <Text type={TextTypesEnum.Bold24} color={Colors.White}>
+          Verify {collection?.name}
+        </Text>
+      </Flex>
       <Container>
-       {(() => {
-        if(authData?.status !== TransactionStatuses.Confirmed) {
-          return (
-            <Flex align="center" width="900px" justify="space-between">
-              <Card name={collection?.name ?? ''} image={collection?.image ?? ''} margin="0" />
-              <Flex direction="column" justify="center" align="center">
-                <Loader
-                  size={LoaderSizes.Large}
-                  color={
-                    authData?.status === TransactionStatuses.Scanned
-                      ? Colors.Green500
-                      : Colors.White
-                  }
-                />
-                <Text
-                  type={TextTypesEnum.Medium24}
-                  color={Colors.White}
-                  margin="16px 0 0"
-                >
-                  {authData?.status === TransactionStatuses.Scanned
-                    ? "Confirming..."
-                    : "Waiting for scan"}
-                </Text>
-              </Flex>
-              <Flex>
-                <Flex direction="column" height="100%" align="center">
-                  
+        {(() => {
+          if (authData?.status !== TransactionStatuses.Confirmed) {
+            return (
+              <Flex
+                align="center"
+                width="900px"
+                justify="space-between"
+                direction="column"
+              >
+                <Flex>
+                  <Flex direction="column" height="100%" align="center">
                     {(() => {
                       if (authData?.gate?.image) {
                         return (
                           <Card
-                            name={authData?.gate?.name ?? ''}
-                            image={authData?.gate?.image ?? ''}
+                            name={authData?.gate?.name ?? ""}
+                            image={authData?.gate?.image ?? ""}
                           />
                         );
                       }
@@ -160,25 +157,50 @@ const Authenticate: React.FC<AuthenticateProps> = ({}) => {
                         </RightContainer>
                       );
                     })()}
+                  </Flex>
+                </Flex>
+                {/* <Card name={collection?.name ?? ''} image={collection?.image ?? ''} margin="0" /> */}
+                <Flex
+                  direction="row"
+                  justify="center"
+                  align="center"
+                  margin="16px 0 0"
+                >
+                  <Text
+                    type={TextTypesEnum.Regular24}
+                    color={Colors.White}
+                    margin="0 12px 0 0"
+                  >
+                    {authData?.status === TransactionStatuses.Scanned
+                      ? "Sign transaction to verify ownership"
+                      : "Scan to get started"}
+                  </Text>
+                  <Loader
+                    size={LoaderSizes.VerySmall}
+                    color={
+                      authData?.status === TransactionStatuses.Scanned
+                        ? Colors.Green500
+                        : Colors.White
+                    }
+                  />
                 </Flex>
               </Flex>
+            );
+          }
+
+          return (
+            <Flex align="center" direction="column">
+              <Image src={authData?.gate?.image} />
+              <Text
+                type={TextTypesEnum.Bold24}
+                color={Colors.White}
+                margin="16px 0 0 0"
+              >
+                {authData?.gate?.name} verified
+              </Text>
             </Flex>
           );
-        }
-
-        return (
-          <Flex align="center" direction="column">
-            <Image src={authData?.gate?.image} />
-            <Text
-              type={TextTypesEnum.Bold24}
-              color={Colors.White}
-              margin="16px 0 0 0"
-            >
-              {authData?.gate?.name} verified
-            </Text>
-          </Flex>
-        );
-       })()}
+        })()}
       </Container>
     </PageLayout>
   );

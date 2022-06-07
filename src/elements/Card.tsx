@@ -39,15 +39,17 @@ type CardProps = {
   image: string;
   name: string;
   margin?: string;
+  onClick?: () => void;
 };
 
 const Card: React.FC<CardProps> = ({
   image,
   name,
   margin,
+  onClick,
 }) => {
   return (
-    <Container image={image} margin={margin}>
+    <Container image={image} margin={margin} onClick={onClick}>
       <Info>
         <Text type={TextTypesEnum.Bold18} color={Colors.White} margin="0 16px 0">
           {name}

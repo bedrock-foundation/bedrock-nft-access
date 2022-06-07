@@ -5,6 +5,7 @@ import BedrockMark from '../assets/bedrock-logo.png';
 import BedrockMarkWide from '../assets/bedrock-logo-wide.png';
 import TwitterWhite from '../assets/twitter-white.png';
 import GitHub from '../assets/github.png';
+import { Link } from 'react-router-dom';
 
 const Breakpoint = '1080px';
 
@@ -22,7 +23,7 @@ const Container = styled.div`
   }
 `;
 
-const HoverLink = styled.a`
+const HoverLink = styled(Link)`
   &:hover {
     cursor: pointer;
   }
@@ -84,7 +85,7 @@ const Navigation: React.FC<NavigationProps> = () => {
   /** Render */
   return (
     <Container>
-      <HoverLink href="https://bedrock.fyi">
+      <HoverLink to="/">
         <Row>
           <BedrockLogo width="60px">
             <Image src={BedrockMark} />

@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import Text, { TextTypesEnum } from "../elements/Text";
 import Colors from "../styles/Colors";
 import AppState from "../recoil/app.recoil";
+import Card from "../elements/Card";
 
 
 const Container = styled.div``;
@@ -19,21 +20,6 @@ const Grid = styled.div`
 type CardProps = {
   collection: any;
 };
-
-const Card = styled.div<CardProps>`
-  border-radius: 16px;
-  padding: 8px;
-  margin: 16px;
-  font-size: 30px;
-  text-align: center;
-  background-image: url(${(props) => props.collection.image});
-  background-size: cover;
-  background-position: center;
-  height: 300px;
-  width: 300px;
-  grid-template-columns: 1fr 1fr 1fr;
-
-`;
 
 type CollectionListProps = {};
 
@@ -58,11 +44,10 @@ const CollectionList: React.FC<CollectionListProps> = () => {
           return (
             <Card
               key={index}
-              collection={collection}
+              name={collection.name}
+              image={collection.image}
               onClick={() => selectCollection(collection?.collectionId ?? '')}
-            >
-              {collection.name}
-            </Card>
+            />
           );
         });
       })()}
